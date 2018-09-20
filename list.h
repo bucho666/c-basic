@@ -25,5 +25,6 @@ inline list list_new() {
 
 void list_add(list* list, void* element);
 void* list_pop(list* list);
+void* list_shift(list* list);
 void* list_remove(list* list, iterator* itr);
 void list_clear(list* list);
