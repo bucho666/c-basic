@@ -21,6 +21,12 @@ array_shuffle(array* array) {
 }
 
 void
+array_resize(array* array, size_t size) {
+  array->element = realloc(array->element, sizeof(void*) * size);
+  array->size = size;
+}
+
+void
 array_free(array* array) {
   free(array->element);
 }

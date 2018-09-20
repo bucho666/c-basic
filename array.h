@@ -8,4 +8,5 @@ typedef struct {
 
 array array_new(size_t size);
 void array_shuffle(array* array);
+void array_resize(array* array, size_t size);
 void array_free(array* array);
