@@ -1,7 +1,6 @@
 #pragma once
-#include <stddef.h>
 
-#define list_each(element, list) for (iterator* (element) = (list).begin; (element); (element) = (element)->next)
+#include <stddef.h>
 
 typedef struct iterator {
   struct iterator* next;

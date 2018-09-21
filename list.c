@@ -1,4 +1,5 @@
 #include "list.h"
+#include "memory.h"
 #include <stdlib.h>
 
 static void* iterator_remove(iterator* itr) {
@@ -13,7 +14,7 @@ static void* iterator_remove(iterator* itr) {
 }
 
 void list_add(list* list, void* element) {
-  iterator* itr = calloc(1, sizeof(iterator));
+  iterator* itr = memory_allocate(1, sizeof(iterator));
   itr->prev = list->end;
   itr->next = NULL;
   itr->element = element;
@@ -37,7 +38,7 @@ void* list_shift(list* list) {
 }
 
 void* list_remove(list* list, iterator* itr) {
-  list_each(i, *list) {
+  for (iterator* i = list->begin; i; i = i->next) {
     if (i != itr) continue;
     list->size--;
     return iterator_remove(i);

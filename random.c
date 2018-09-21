@@ -3,7 +3,8 @@
 #include <time.h>
 #include "random.h"
 
-int random_range(int min, int max) {
+int
+random_range(int min, int max) {
   static bool initialize = false;
   if (!initialize) {
     srand(time(NULL));
