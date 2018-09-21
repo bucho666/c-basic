@@ -1,23 +1,22 @@
-#include "random.h"
+#include "hash.h"
 #include "array.h"
 #include <stdio.h>
 #include <stdlib.h>
 
 int
 main() {
-  array a = array_new(5);
-  a.element[0] = "1";
-  a.element[1] = "2";
-  a.element[2] = "3";
-  a.element[3] = "4";
-  a.element[4] = "5";
-  array_shuffle(&a);
-  array_resize(&a, 6);
-  a.element[5] = "resize";
-  for (int i = 0; i < a.size; i++) {
-    printf("%s ", (char*)a.element[i]);
-  }
-  printf("\n");
-  array_free(&a);
+  hash h = hash_new();
+  hash_set(&h, "a", "1");
+  hash_set(&h, "b", "2");
+  hash_set(&h, "c", "3");
+  hash_remove(&h, "b");
+  printf("%s: %s\n", "a", hash_get(&h, "a"));
+  printf("%s: %p\n", "b", hash_get(&h, "b"));
+  printf("%s: %s\n", "c", hash_get(&h, "c"));
+  hash_clear(&h);
+  printf("%s: %p\n", "a", hash_get(&h, "a"));
+  printf("%s: %p\n", "b", hash_get(&h, "b"));
+  printf("%s: %p\n", "c", hash_get(&h, "c"));
+  hash_free(&h);
   return 0;
 }
