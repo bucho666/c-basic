@@ -5,7 +5,7 @@ project(ex C)
 # Cのバージョン指定
 set(CMAKE_C_STANDARD 11)
 # コンパイラ指定
-set(CMAKE_C_COMPILER /usr/local/bin/clang)
+set(CMAKE_C_COMPILER /usr/bin/clang)
 # コンパイルオプション
 set(CMAKE_C_FLAGS "-O2 -Wall")
 # カレントディレクトリのソースファイル取得
