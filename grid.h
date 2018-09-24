@@ -8,8 +8,6 @@ typedef struct {
   void** cell;
 } grid;
 
-grid grid_new(size size);
-
 inline grid grid_new(size size) {
   return (grid) {
     .size = size,
