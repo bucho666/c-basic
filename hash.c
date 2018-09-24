@@ -7,7 +7,6 @@ static bucket removed;
 
 static inline void
 free_bucket(bucket* b) {
-  free(b->data);
   free(b->key);
   free(b);
 }
@@ -64,12 +63,11 @@ static void rehash(hash* hash) {
 
 
 hash
-hash_new(size_t data_size) {
+hash_new() {
   static const int initial_length = 8;
   return (hash) {
     .table = memory_allocate(initial_length, sizeof(bucket*)),
     .length = initial_length,
-    .data_size = data_size,
     .usable_buckets = calculate_usable_buckets(initial_length)
   };
 }
@@ -77,8 +75,7 @@ hash_new(size_t data_size) {
 void
 hash_set(hash* hash, const char* key, void* data) {
   bucket* new_bucket = memory_allocate(1, sizeof(bucket));
-  new_bucket->data = memory_allocate(1, hash->data_size);
-  memory_copy(data, new_bucket->data, hash->data_size);
+  new_bucket->data = data;
   new_bucket->hash = calculate_hash(key);
   new_bucket->key = strcpy(memory_allocate(strlen(key) + 1, sizeof(char)), key);
   int index = find_open_index(hash, new_bucket->hash % hash->length);
@@ -94,12 +91,14 @@ hash_get(hash* hash, const char* key) {
   return hash->table[index]->data;
 }
 
-void
+void*
 hash_remove(hash* hash, const char* key) {
   int index = get_index_of_key(hash, key);
-  if (index == -1) return;
+  if (index == -1) return NULL;
+  void* data = hash->table[index]->data;
   free_bucket(hash->table[index]);
   hash->table[index] = &removed;
+  return data;
 }
 
 void

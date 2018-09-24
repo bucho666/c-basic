@@ -9,7 +9,7 @@ iterator_remove(iterator* itr) {
   iterator* next = itr->next;
   if (prev != NULL) prev->next = next;
   if (next != NULL) next->prev = prev;
-  byte* data = itr->data;
+  void* data = itr->data;
   free(itr);
   return data;
 }
@@ -19,8 +19,7 @@ list_add(list* list, void* data) {
   iterator* itr = memory_allocate(1, sizeof(iterator));
   itr->prev = list->end;
   itr->next = NULL;
-  itr->data = memory_allocate(1, list->size);
-  memory_copy(data, itr->data, list->size);
+  itr->data = data;
   if (list->begin == NULL) {
     list->begin = itr;
   } else {
@@ -42,13 +41,14 @@ list_shift(list* list) {
   return iterator_remove(list->begin);
 }
 
-void
+void*
 list_remove(list* list, iterator* itr) {
   for (iterator* i = list->begin; i; i = i->next) {
     if (i != itr) continue;
-    list->size--;
-    free(iterator_remove(i));
+    list->length--;
+    return iterator_remove(i);
   }
+  return NULL;
 }
 
 void
@@ -57,7 +57,6 @@ list_clear(list* list) {
   iterator* next;
   while(itr) {
     next = itr->next;
-    free(itr->data);
     free(itr);
     itr = next;
   }
