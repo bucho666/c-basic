@@ -17,7 +17,7 @@ grid_new(size size, size_t data_size) {
 }
 
 void* grid_get(const grid* grid, int x, int y) {
-  return &grid->cell[index_of(grid, x, y)];
+  return grid->cell + index_of(grid, x, y);
 }
 
 void grid_set(grid* grid, int x, int y, void* value) {

@@ -8,3 +8,4 @@
 #include "random.h"
 #include "size.h"
 #include "grid.h"
+#include "type.h"
