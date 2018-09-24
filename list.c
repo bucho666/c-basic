@@ -2,58 +2,65 @@
 #include "memory.h"
 #include <stdlib.h>
 
-static void* iterator_remove(iterator* itr) {
+static void*
+iterator_remove(iterator* itr) {
   if (itr == NULL) return NULL;
   iterator* prev = itr->prev;
   iterator* next = itr->next;
-  void* element = itr->element;
   if (prev != NULL) prev->next = next;
   if (next != NULL) next->prev = prev;
+  byte* data = itr->data;
   free(itr);
-  return element;
+  return data;
 }
 
-void list_add(list* list, void* element) {
+void
+list_add(list* list, void* data) {
   iterator* itr = memory_allocate(1, sizeof(iterator));
   itr->prev = list->end;
   itr->next = NULL;
-  itr->element = element;
+  itr->data = memory_allocate(1, list->size);
+  memory_copy(data, itr->data, list->size);
   if (list->begin == NULL) {
     list->begin = itr;
   } else {
     list->end->next = itr;
   }
   list->end = itr;
-  list->size++;
+  list->length++;
 }
 
-void* list_pop(list* list) {
-  list->size--;
+void*
+list_pop(list* list) {
+  list->length--;
   return iterator_remove(list->end);
 }
 
-void* list_shift(list* list) {
-  list->size--;
+void*
+list_shift(list* list) {
+  list->length--;
   return iterator_remove(list->begin);
 }
 
-void* list_remove(list* list, iterator* itr) {
+void
+list_remove(list* list, iterator* itr) {
   for (iterator* i = list->begin; i; i = i->next) {
     if (i != itr) continue;
     list->size--;
-    return iterator_remove(i);
+    free(iterator_remove(i));
   }
-  return NULL;
 }
 
-void list_clear(list* list) {
+void
+list_clear(list* list) {
   iterator* itr = list->begin;
   iterator* next;
   while(itr) {
     next = itr->next;
+    free(itr->data);
     free(itr);
     itr = next;
   }
-  list->size = 0;
+  list->length = 0;
   list->begin = list->end = NULL;
 }

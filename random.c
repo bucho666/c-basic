@@ -1,16 +1,14 @@
-#include <stdlib.h>
-#include <stdbool.h>
-#include <time.h>
 #include "random.h"
+#include <stdbool.h>
+#include <stdlib.h>
+#include <time.h>
 
 int
 random_range(int min, int max) {
   static bool initialize = false;
   if (!initialize) {
-    srand(time(NULL));
+    srandom(time(NULL));
     initialize = true;
   }
-  return (rand() % (max - min + 1)) + min;
+  return (random() % (max - min + 1)) + min;
 }
-
-

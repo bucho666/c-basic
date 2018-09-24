@@ -1,22 +1,27 @@
 #include "array.h"
-#include "random.h"
-#include "macro.h"
 #include "memory.h"
-#include <stdlib.h>
+#include "random.h"
+
+typedef char byte;
 
 array
-array_new(size_t size) {
-  return (array){
+array_new(size_t length, size_t size) {
+  return (array) {
+    .length = length,
     .size = size,
-    .element = memory_allocate(size,  sizeof(void*))
+    .element = memory_allocate(length,  size),
   };
 }
 
 void
 array_shuffle(array* array) {
-  for (size_t a = array->size - 1; a > 0; a--) {
-    size_t b = random_range(0, a);
-    swap(array->element[a], array->element[b]);
+  byte temp[array->size];
+  size_t size = array->size;
+  for (size_t i = array->length - 1; i > 0; i--) {
+    size_t t = random_range(0, i);
+    memory_copy(array->element + (i * size), temp, size);
+    memory_copy(array->element + (t * size), array->element + (i * size), size);
+    memory_copy(temp, array->element + (t * size), size);
   }
 }
 
